@@ -3,11 +3,14 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { CompanyProvider } from './context/CompanyContext'; // Import CompanyProvider
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <CompanyProvider> {/* Wrap App with CompanyProvider */}
+      <App />
+    </CompanyProvider>
   </React.StrictMode>
 );
 

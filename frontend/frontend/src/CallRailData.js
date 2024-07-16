@@ -1,6 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useTable, useSortBy } from 'react-table';
+
+// Function to format duration from seconds to "mm:ss"
+const formatDuration = (seconds) => {
+  if (!seconds) return 'N/A';
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+};
+
+// Function to format date and time from ISO string
+const formatDateTime = (isoString) => {
+  if (!isoString) return 'N/A';
+  const date = new Date(isoString);
+  const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+  return formattedDate;
+};
 
 const CallRailData = () => {
   const [data, setData] = useState([]);
@@ -8,7 +23,9 @@ const CallRailData = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/v1/call_rail_data');
+        console.log("Fetching aggregated data for all companies");
+        const response = await axios.get('http://localhost:3000/api/v1/call_rail_data?company_id=YOUR_COMPANY_ID');
+        console.log("Fetched Data:", response.data);
         setData(response.data);
       } catch (error) {
         console.error('Error fetching the data', error);
@@ -18,68 +35,37 @@ const CallRailData = () => {
     fetchData();
   }, []);
 
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: 'Customer Name',
-        accessor: 'customer_name',
-      },
-      {
-        Header: 'Customer Phone',
-        accessor: 'customer_phone_number',
-      },
-      {
-        Header: 'Start Time',
-        accessor: 'start_time',
-        Cell: ({ value }) => new Date(value).toLocaleString(),
-      },
-      {
-        Header: 'Duration',
-        accessor: 'duration',
-      },
-    ],
-    []
-  );
-
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = useTable({ columns, data }, useSortBy);
-
   return (
-    <div>
+    <div style={{ padding: '20px' }}>
       <h1>Call Rail Data</h1>
-      <table {...getTableProps()}>
-        <thead>
-          {headerGroups.map(headerGroup => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                  {column.render('Header')}
-                  <span>
-                    {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
-                  </span>
-                </th>
-              ))}
+      {data.length > 0 && (
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr>
+              <th style={{ borderBottom: '1px solid #ddd', padding: '8px', background: '#f2f2f2' }}>Customer</th>
+              <th style={{ borderBottom: '1px solid #ddd', padding: '8px', background: '#f2f2f2' }}>Duration</th>
+              <th style={{ borderBottom: '1px solid #ddd', padding: '8px', background: '#f2f2f2' }}>Start Date & Time</th>
+              <th style={{ borderBottom: '1px solid #ddd', padding: '8px', background: '#f2f2f2' }}>Recording Player</th>
             </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map(row => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map(cell => (
-                  <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                ))}
+          </thead>
+          <tbody>
+            {data.map((item, index) => (
+              <tr key={index} style={{ background: index % 2 === 0 ? '#f9f9f9' : 'white' }}>
+                <td style={{ borderBottom: '1px solid #ddd', padding: '8px' }}>{item.customer_name || 'N/A'}</td>
+                <td style={{ borderBottom: '1px solid #ddd', padding: '8px' }}>{formatDuration(item.duration)}</td>
+                <td style={{ borderBottom: '1px solid #ddd', padding: '8px' }}>{formatDateTime(item.start_time)}</td>
+                <td style={{ borderBottom: '1px solid #ddd', padding: '8px' }}>
+                  {item.recording_player && (
+                    <a href={item.recording_player} target="_blank" rel="noopener noreferrer">
+                      Play Recording
+                    </a>
+                  )}
+                </td>
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };
