@@ -45,9 +45,7 @@ const CallRailData = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log("Fetching aggregated data for all companies");
         const response = await axios.get('http://localhost:3000/api/v1/call_rail_data');
-        console.log("Fetched Data:", response.data);
   
         // Sort data by start_time in descending order (newest to oldest)
         const sortedData = response.data.sort((a, b) => {
