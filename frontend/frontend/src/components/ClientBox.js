@@ -1,7 +1,9 @@
+// frontend/src/components/ClientBox.js
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { CompanyContext } from '../context/CompanyContext'; // Ensure correct path
 import './ClientBox.css'; // Ensure you have a corresponding CSS file for styling
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 
 const ClientBox = ({ companyId, companyName }) => {
   const [totalCalls, setTotalCalls] = useState(0);
@@ -29,8 +31,10 @@ const ClientBox = ({ companyId, companyName }) => {
 
   return (
     <div className="client-box">
-      <h2>{companyName}</h2>
-      <p>Total Calls: {totalCalls}</p>
+      <Link to={`/client/${companyId}`}>
+        <h2>{companyName}</h2>
+        <p>Total Calls: {totalCalls}</p>
+      </Link>
     </div>
   );
 };

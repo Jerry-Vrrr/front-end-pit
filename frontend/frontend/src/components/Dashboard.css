@@ -22,9 +22,11 @@
 .show-more-button {
     display: block;
     margin: 20px auto;
-    padding: 10px 20px;
-    background: #007bff;
-    color: white;
+    padding: 8px 20px;
+    background: #ff914d;
+    color: black;
+    font-size: large;
+    font-weight: 700;
     border: none;
     border-radius: 5px;
     cursor: pointer;
