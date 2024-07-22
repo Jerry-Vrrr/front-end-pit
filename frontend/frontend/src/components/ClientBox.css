@@ -1,0 +1,27 @@
+/* ClientBox.css */
+.client-box {
+    flex: 1 1 calc(25% - 20px); /* Four columns with spacing */
+    background: #f9f9f9;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .client-box:hover {
+    transform: translateY(-5px);
+  }
+  
+  .client-box h2 {
+    margin-bottom: 10px;
+    font-size: 1.5em;
+    color: #333;
+  }
+  
+  .client-box p {
+    font-size: 1.2em;
+    color: #666;
+  }
+  

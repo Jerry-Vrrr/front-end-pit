@@ -1,14 +1,13 @@
 import './App.css';
 import CallRailData from './CallRailData';
 import Navbar from './components/Navbar';
+import Dashboard from './components/Dashboard';
 
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Call Rail Dashboard</h1>
-      </header>
+      <Dashboard />
       <Navbar />
       <CallRailData />
     </div>

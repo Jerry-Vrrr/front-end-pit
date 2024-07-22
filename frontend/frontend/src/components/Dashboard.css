@@ -1,0 +1,31 @@
+/* frontend/src/components/Dashboard.css */
+.dashboard {
+    margin-top: 6em;
+    padding: 3em;
+}
+
+.client-boxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.client-box {
+    flex: 1 1 calc(20% - 20px); /* Four columns with spacing */
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.show-more-button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

@@ -1,43 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import axios from 'axios';
-
-// Function to format duration from seconds to "mm:ss"
-const formatDuration = (seconds) => {
-  if (!seconds) return 'N/A';
-  const mins = Math.floor(seconds / 60);
-  const secs = seconds % 60;
-  return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-};
-
-// Function to format date and time from ISO string
-const formatDateTime = (isoString) => {
-  if (!isoString) return 'N/A';
-  const date = new Date(isoString);
-  const formattedDate = `${date.toLocaleDateString()} at ${date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`;
-  return formattedDate;
-};
-
-// Define COMPANY_MAPPING object
-const COMPANY_MAPPING = {
-  "475663645": "Apricot",
-  "432770919": "Brock",
-  "754688700": "Brown Chiari",
-  "707808192": "Conger",
-  "196651924": "CPJ",
-  "408997789": "Crowell",
-  "788957891": "GM",
-  "435195417": "Greenberg",
-  "294642214": "KLAW",
-  "533921350": "Kohan Bablove",
-  "316384868": "Lewis",
-  "612344072": "Lopez Humphries",
-  "595022144": "Mahoney",
-  "258732157": "Money",
-  "427975086": "Rozas",
-  "847306783": "Trust"
-};
+import { CompanyContext } from './context/CompanyContext'; // Import CompanyContext
 
 const CallRailData = () => {
+  const { COMPANY_MAPPING } = useContext(CompanyContext); // Access COMPANY_MAPPING from context
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [selectedCompany, setSelectedCompany] = useState(''); // Default selected company is empty (show all)
@@ -61,6 +27,22 @@ const CallRailData = () => {
   
     fetchData();
   }, []);
+
+  // Function to format duration from seconds to "mm:ss"
+  const formatDuration = (seconds) => {
+    if (!seconds) return 'N/A';
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  };
+
+  // Function to format date and time from ISO string
+  const formatDateTime = (isoString) => {
+    if (!isoString) return 'N/A';
+    const date = new Date(isoString);
+    const formattedDate = `${date.toLocaleDateString()} at ${date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`;
+    return formattedDate;
+  };
 
   // Function to handle company selection change
   const handleCompanyChange = (event) => {
@@ -109,14 +91,14 @@ const CallRailData = () => {
                 <td style={{ borderBottom: '1px solid #ddd', padding: '8px' }}>{formatDuration(item.duration)}</td>
                 <td style={{ borderBottom: '1px solid #ddd', padding: '8px' }}>{formatDateTime(item.start_time)}</td>
                 <td style={{ borderBottom: '1px solid #ddd', padding: '8px' }}>
-  {item.recording_player ? (
-    <a href={item.recording_player} target="_blank" rel="noopener noreferrer">
-      Play Recording
-    </a>
-  ) : (
-    'Not Applicable'
-  )}
-</td>
+                  {item.recording_player ? (
+                    <a href={item.recording_player} target="_blank" rel="noopener noreferrer">
+                      Play Recording
+                    </a>
+                  ) : (
+                    'Not Applicable'
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
