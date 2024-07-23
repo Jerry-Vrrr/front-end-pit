@@ -62,3 +62,18 @@
     color: #FF9A5C;
     text-decoration: underline;
   }
+  .trend-up {
+    color: green !important;
+  }
+  
+  .trend-down {
+    color: red !important;
+  }
+  
+  .total-calls, .calls-today {
+      font-size: 1.2em;
+  }
+  .call-label {
+    font-size: x-large;
+    font-weight: 600;
+  }
