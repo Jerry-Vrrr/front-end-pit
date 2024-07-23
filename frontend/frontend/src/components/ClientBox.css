@@ -50,9 +50,9 @@
 
 .show-more-button {
     margin-bottom: 20px;
-  }
-  
-  .show-more-button  {
+}
+
+.show-more-button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -62,12 +62,23 @@
     color: black;
     font-size: large;
     font-weight: 700;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+}
+
+.show-more-button:hover {
+    background-color: #FF9A5C;
+    transform: scale(1.04);
+}
+
+/* Place specific classes after general styles */
+
+.trend-up {
+    color: green !important;
   }
   
-  .show-more-button:hover {
-    background-color: #FF9A5C;
-    transform: scale(1.04)
+  .trend-down {
+    color: red !important;
+  }
+  
+  .total-calls, .calls-today {
+    font-weight:700;
   }
