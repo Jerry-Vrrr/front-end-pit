@@ -49,12 +49,25 @@
 }
 
 .show-more-button {
-    display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
-    background: #ff914d;
-    color: white;
+    margin-bottom: 20px;
+  }
+  
+  .show-more-button  {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-}
+    margin: 10px;
+    padding: 10px 20px;
+    background: #ff914d;
+    color: black;
+    font-size: large;
+    font-weight: 700;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .show-more-button:hover {
+    background-color: #FF9A5C;
+    transform: scale(1.04)
+  }

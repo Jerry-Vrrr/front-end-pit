@@ -93,7 +93,7 @@ const ClientDetail = () => {
               <tr key={call.call_id}>
                 <td>{call.customer_name}</td>
                 <td>
-  <a href={`tel:${call.customer_phone_number}`}>
+  <a className='phone' href={`tel:${call.customer_phone_number}`}>
     {`(${call.customer_phone_number.slice(2, 5)}) ${call.customer_phone_number.slice(4, 7)}-${call.customer_phone_number.slice(8)}`}
   </a>
 </td>                <td>{new Date(call.start_time).toLocaleString()}</td>

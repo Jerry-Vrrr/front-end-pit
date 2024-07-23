@@ -16,16 +16,17 @@
     margin: 10px;
     padding: 10px 20px;
     background: #ff914d;
-    color: white;
+    color: black;
     font-size: large;
-    font-weight: 700;
+    font-weight: 600;
     border: none;
     border-radius: 5px;
     cursor: pointer;
   }
   
   .filter-buttons button:hover {
-    background-color: #0056b3;
+    background-color: #FF9A5C;
+    transform: scale(1.04)
   }
   
   .client-detail-table {
@@ -49,4 +50,15 @@
     font-weight: bold;
     margin-top: 20px;
   }
+
+  .phone {
+    text-decoration: none;
+    color: #ff914d;
+    text-shadow: gray .2px .2px 1px;
+    font-weight: 600;
+  }
   
+  .phone:hover {
+    color: #FF9A5C;
+    text-decoration: underline;
+  }
