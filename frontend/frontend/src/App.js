@@ -1,14 +1,18 @@
+import React from 'react';
 import './App.css';
-import CallRailData from './CallRailData';
-
+import Navbar from './components/Navbar';
+import Dashboard from './components/Dashboard';
+import ClientDetail from './components/ClientDetail';
+import { Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Call Rail Dashboard</h1>
-      </header>
-      <CallRailData />
+      <Navbar />
+      <Routes>
+        <Route exact path="/" element={<Dashboard />} />
+        <Route path="/client/:companyId" element={<ClientDetail />} />
+      </Routes>
     </div>
   );
 }

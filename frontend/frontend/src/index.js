@@ -4,13 +4,16 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { CompanyProvider } from './context/CompanyContext'; // Import CompanyProvider
+import { BrowserRouter as Router } from 'react-router-dom'; // Import BrowserRouter
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <CompanyProvider> {/* Wrap App with CompanyProvider */}
-      <App />
-    </CompanyProvider>
+    <Router> {/* Wrap App with Router */}
+      <CompanyProvider> {/* Wrap App with CompanyProvider */}
+        <App />
+      </CompanyProvider>
+    </Router>
   </React.StrictMode>
 );
 
