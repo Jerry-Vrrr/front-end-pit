@@ -30,6 +30,10 @@
     margin-top: 1em;
 }
 
+.logo img:hover {
+    opacity: 0.92;
+}
+
 .nav-links {
     display: flex;
 }
@@ -66,4 +70,7 @@
     height: 4em; 
     border-radius: 50%;
     padding: 2em;
+}
+.profile-icon img:hover {
+    opacity: 0.92;
 }
