@@ -5,11 +5,11 @@
     margin-top: 7em;
   }
   
-  .filter-buttons {
+  .filter-buttons  {
     margin-bottom: 20px;
   }
   
-  .filter-buttons button {
+  .filter-buttons  button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -80,3 +80,61 @@
     font-size: x-large;
     font-weight: 600;
   }
+  .gravity-forms-data {
+    margin-top: 30px;
+}
+
+.gravity-forms-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.gravity-forms-table th,
+.gravity-forms-table td {
+    border: 1px solid #ddd;
+    padding: 6px;
+}
+
+.gravity-forms-table th {
+    background-color: #f2f2f2;
+}
+
+.error-message {
+    color: red;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.show-button {
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background: none;
+    color: black;
+    font-size: small;
+    font-weight: 200;
+}
+
+.show-more-container {
+    display: flex;
+    justify-content: flex-start; /* Aligns the button to the right */
+    /* margin: 0em 12em 0em 2em; */
+  }
+  
+  .show-more-button {
+    padding: 5px 20px;
+    background: #ff914d;
+    color: black;
+    font-size: medium;
+    font-weight: 600;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .show-more-button:hover {
+    background-color: #FF9A5C;
+    transform: scale(1.04);
+  }
+  

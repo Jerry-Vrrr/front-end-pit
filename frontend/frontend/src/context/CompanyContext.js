@@ -65,8 +65,28 @@ export const CompanyProvider = ({ children }) => {
     }
   };
 
+  const fetchGravityFormsData = async () => {
+    const auth = {
+      username: 'ck_8e657209e76f4f4284597c95a9e305ab1974e8a4',
+      password: 'cs_e40a71b025a5c59b3409c74165c18434eab75d7f',
+    };
+  
+    try {
+      const response = await axios.get('https://www.greensteinmilbauer.com/wp-json/gf/v2/entries', {
+        auth,
+      });
+  
+      const entries = response.data;
+      console.log('Gravity Forms Entries:', entries);
+      // Process entries as needed
+    } catch (error) {
+      console.error('Error fetching Gravity Forms data:', error);
+    }
+  };
+  
   useEffect(() => {
     fetchCallData(selectedCompany);
+    fetchGravityFormsData()
   }, [selectedCompany]);
 
   return (
@@ -79,7 +99,7 @@ export const CompanyProvider = ({ children }) => {
       trend24Hours,
       trend30Days,
       setTrend24Hours, 
-      setTrend30Days 
+      setTrend30Days,
     }}>
       {children}
     </CompanyContext.Provider>
