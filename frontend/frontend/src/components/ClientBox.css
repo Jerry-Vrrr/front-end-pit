@@ -65,7 +65,8 @@
 }
 
 .show-more-button:hover {
-    background-color: #FF9A5C;
+    /* background-color: #FF9A5C; */
+    opacity: 0.9;
     transform: scale(1.04);
 }
 

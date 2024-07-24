@@ -25,7 +25,8 @@
   }
   
   .filter-buttons button:hover {
-    background-color: #FF9A5C;
+    /* background-color: #FF9A5C; */
+    opacity: 0.9;
     transform: scale(1.04)
   }
   
@@ -54,12 +55,14 @@
   .phone {
     text-decoration: none;
     color: #ff914d;
+    opacity: 0.96;
     text-shadow: gray .2px .2px 1px;
     font-weight: 600;
   }
   
   .phone:hover {
-    color: #FF9A5C;
+    color: #ff914d;
+    opacity: 1;
     text-decoration: underline;
   }
   .trend-up {
