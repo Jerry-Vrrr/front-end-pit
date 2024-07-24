@@ -28,6 +28,7 @@ export const CompanyProvider = ({ children }) => {
   const [callsLast24Hours, setCallsLast24Hours] = useState({});
   const [trend24Hours, setTrend24Hours] = useState({});
   const [trend30Days, setTrend30Days] = useState({});
+  const [entriesLast24Hours, setEntriesLast24Hours] = useState(0); // State to store entries count
 
   const fetchCallData = async (companyId) => {
     try {
@@ -76,9 +77,14 @@ export const CompanyProvider = ({ children }) => {
         auth,
       });
   
-      const entries = response.data;
-      console.log('Gravity Forms Entries:', entries);
-      // Process entries as needed
+      const entries = response.data.entries;
+
+      // Filter entries from the last 24 hours
+      const twentyFourHoursAgo = new Date();
+      twentyFourHoursAgo.setDate(twentyFourHoursAgo.getDate() - 1);
+
+      const recentEntries = entries.filter(entry => new Date(entry.date_created) >= twentyFourHoursAgo);
+      setEntriesLast24Hours(recentEntries.length); // Set the count of entries from the last 24 hours
     } catch (error) {
       console.error('Error fetching Gravity Forms data:', error);
     }
@@ -100,6 +106,7 @@ export const CompanyProvider = ({ children }) => {
       trend30Days,
       setTrend24Hours, 
       setTrend30Days,
+      entriesLast24Hours 
     }}>
       {children}
     </CompanyContext.Provider>

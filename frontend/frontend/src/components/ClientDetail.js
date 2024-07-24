@@ -11,6 +11,7 @@ import nope from '../assets/nope.png';
 const ClientDetail = () => {
   const { companyId } = useParams();
   const { COMPANY_MAPPING } = useContext(CompanyContext);
+  const { entriesLast24Hours } = useContext(CompanyContext);
   const [filteredData, setFilteredData] = useState([]);
   const [filter, setFilter] = useState('all');
   const [error, setError] = useState(null);
@@ -89,6 +90,7 @@ const handleToggleExpand = (id) => {
         const entries = response.data.entries;
         console.log('Gravity Forms Entries:', entries); // Log the entries to inspect the response
         setGravityFormsData(entries);
+        
       } catch (error) {
         console.error('Error fetching Gravity Forms data:', error);
       }
@@ -142,8 +144,9 @@ const handleToggleExpand = (id) => {
 
   return (
     <div className="client-detail-container">
-      <h1>Client Detail for {COMPANY_MAPPING[companyId]}</h1>
+      <h1>{COMPANY_MAPPING[companyId]} Interaction Hub</h1>
       <div className="stats">
+      <p className='call-label'>New Chats: <span className={`number ${entriesLast24Hours > 0 ? 'trend-up' : ''}`}>{entriesLast24Hours || 0}</span></p>
         <p className='call-label'>Total Calls: <span className={`number ${trend30Days}`}>{totalCalls || 0}</span></p>
         <p className='call-label' >Calls Today: <span className={`number ${trend24Hours}`}>{callsLast24Hours || 0}</span></p>
       </div>

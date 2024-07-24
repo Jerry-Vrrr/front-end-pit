@@ -54,7 +54,7 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
-      <h1>Client Dashboard</h1>
+      <h1>Client Performance Overview</h1>
       <div className="client-boxes">
         {clientCallCounts
           .slice(0, showMore ? clientCallCounts.length : 8) // Show all if showMore is true, else show only first 8
