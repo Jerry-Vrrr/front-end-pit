@@ -8,7 +8,7 @@ const COMPANY_MAPPING = {
   "707808192": "Conger",
   "196651924": "CPJ",
   "408997789": "Crowell",
-  "788957891": "GM",
+  "788957891": "Greenstein Pittari",
   "435195417": "Greenberg",
   "294642214": "KLAW",
   "533921350": "Kohan Bablove",
