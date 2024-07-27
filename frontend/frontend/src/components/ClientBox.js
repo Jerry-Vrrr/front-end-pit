@@ -5,11 +5,11 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const ClientBox = ({ companyId, companyName }) => {
-  const { setSelectedCompany } = useContext(CompanyContext);
+  const { setSelectedCompany, entriesLast24Hours } = useContext(CompanyContext);
   const [totalCalls, setTotalCalls] = useState(0);
   const [callsLast24Hours, setCallsLast24Hours] = useState(0);
-  const [trend30Days, setTrend30Days] = useState(null); // Add state for trends
-  const [trend24Hours, setTrend24Hours] = useState(null); // Add state for trends
+  const [trend30Days, setTrend30Days] = useState(null);
+  const [trend24Hours, setTrend24Hours] = useState(null);
 
   useEffect(() => {
     const fetchClientData = async () => {
@@ -30,7 +30,6 @@ const ClientBox = ({ companyId, companyName }) => {
         setCallsLast24Hours(recent24HourCalls.length);
 
         // Add logic to compare and set trends
-        // Example logic for trends, update with actual data comparison
         const previous30DaysCalls = recentCalls.length; // Placeholder, replace with actual data
         const previous24HourCalls = recent24HourCalls.length; // Placeholder, replace with actual data
 
@@ -51,14 +50,17 @@ const ClientBox = ({ companyId, companyName }) => {
   return (
     <div className="client-box" onClick={handleClick}>
       <Link to={`/client/${companyId}`}>
-  <h2>{companyName}</h2>
-  <p className="total-calls">
-    Total Calls: <span className={`number ${trend30Days}`}>{totalCalls}</span>
-  </p>
-  <p className="calls-today">
-    Calls Today: <span className={`number ${trend24Hours}`}>{callsLast24Hours}</span>
-  </p>
-</Link>
+        <h2>{companyName}</h2>
+        <p className="total-calls">
+          Total Calls: <span className={`number ${trend30Days}`}>{totalCalls}</span>
+        </p>
+        <p className="calls-today">
+          Calls Today: <span className={`number ${trend24Hours}`}>{callsLast24Hours}</span>
+        </p>
+        <p className="chats-today">
+          New Chats: <span className={`number ${entriesLast24Hours?.[companyId] > 0 ? 'trend-up' : ''}`}>{entriesLast24Hours?.[companyId] || 0}</span>
+        </p>
+      </Link>
     </div>
   );
 };

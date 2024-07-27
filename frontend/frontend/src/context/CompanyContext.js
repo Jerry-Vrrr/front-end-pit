@@ -28,7 +28,7 @@ export const CompanyProvider = ({ children }) => {
   const [callsLast24Hours, setCallsLast24Hours] = useState({});
   const [trend24Hours, setTrend24Hours] = useState({});
   const [trend30Days, setTrend30Days] = useState({});
-  const [entriesLast24Hours, setEntriesLast24Hours] = useState(0); // State to store entries count
+  const [entriesLast24Hours, setEntriesLast24Hours] = useState({}); // State to store entries count
 
   const fetchCallData = async (companyId) => {
     try {
@@ -67,24 +67,26 @@ export const CompanyProvider = ({ children }) => {
   };
 
   const fetchGravityFormsData = async () => {
-    const auth = {
-      username: 'ck_8e657209e76f4f4284597c95a9e305ab1974e8a4',
-      password: 'cs_e40a71b025a5c59b3409c74165c18434eab75d7f',
-    };
-  
     try {
-      const response = await axios.get('https://www.greensteinmilbauer.com/wp-json/gf/v2/entries', {
-        auth,
-      });
-  
-      const entries = response.data.entries;
-
-      // Filter entries from the last 24 hours
+      const response = await axios.get('http://localhost:3000/api/v1/gravity_forms/entries');
+      const entries = response.data;
+      
+      // Process entries to count the number of new chats for each company in the last 24 hours
       const twentyFourHoursAgo = new Date();
-      twentyFourHoursAgo.setDate(twentyFourHoursAgo.getDate() - 1);
+      twentyFourHoursAgo.setDate(twentyFourHoursAgo.getDate() - 7);
 
-      const recentEntries = entries.filter(entry => new Date(entry.date_created) >= twentyFourHoursAgo);
-      setEntriesLast24Hours(recentEntries.length); // Set the count of entries from the last 24 hours
+      const newEntries = {};
+      entries.forEach(entry => {
+        const companyId = entry.company_id; // Ensure this matches the attribute name in your entries
+        if (new Date(entry.date_created) >= twentyFourHoursAgo) {
+          if (!newEntries[companyId]) {
+            newEntries[companyId] = 0;
+          }
+          newEntries[companyId]++;
+        }
+      });
+
+      setEntriesLast24Hours(newEntries);
     } catch (error) {
       console.error('Error fetching Gravity Forms data:', error);
     }
@@ -92,7 +94,7 @@ export const CompanyProvider = ({ children }) => {
   
   useEffect(() => {
     fetchCallData(selectedCompany);
-    fetchGravityFormsData()
+    fetchGravityFormsData();
   }, [selectedCompany]);
 
   return (
