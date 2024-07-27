@@ -8,19 +8,15 @@ import nope from '../assets/nope.png';
 
 const ClientDetail = () => {
   const { companyId } = useParams();
-  const { COMPANY_MAPPING, entriesLast24Hours } = useContext(CompanyContext);
+  const { COMPANY_MAPPING, entriesLast24Hours, gravityFormEntries, totalCalls, callsLast24Hours, trend30Days, trend24Hours } = useContext(CompanyContext);
   const [filteredData, setFilteredData] = useState([]);
   const [filter, setFilter] = useState('all');
   const [error, setError] = useState(null);
-  const [totalCalls, setTotalCalls] = useState(0);
-  const [callsLast24Hours, setCallsLast24Hours] = useState(0);
-  const [trend30Days, setTrend30Days] = useState('');
-  const [trend24Hours, setTrend24Hours] = useState('');
-  const [gravityFormsData, setGravityFormsData] = useState([]);
-  const navigate = useNavigate();
   const [expandedEntries, setExpandedEntries] = useState([]);
   const [showMoreCalls, setShowMoreCalls] = useState(false);
   const [showMoreEntries, setShowMoreEntries] = useState(false);
+  
+  const navigate = useNavigate();
   
   const handleShowMoreCalls = () => {
     setShowMoreCalls(!showMoreCalls);
@@ -51,20 +47,11 @@ const ClientDetail = () => {
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
         const recentCalls = calls.filter(call => new Date(call.start_time) >= thirtyDaysAgo);
-        setTotalCalls(recentCalls.length);
 
         // Filter calls from the last 24 hours
         const twentyFourHoursAgo = new Date();
         twentyFourHoursAgo.setDate(twentyFourHoursAgo.getDate() - 1);
         const recent24HourCalls = calls.filter(call => new Date(call.start_time) >= twentyFourHoursAgo);
-        setCallsLast24Hours(recent24HourCalls.length);
-
-        // Add logic to compare and set trends
-        const previous30DaysCalls = recentCalls.length;
-        const previous24HourCalls = recent24HourCalls.length;
-
-        setTrend30Days(totalCalls >= previous30DaysCalls ? 'trend-up' : 'trend-down');
-        setTrend24Hours(callsLast24Hours >= previous24HourCalls ? 'trend-up' : 'trend-down');
 
         setFilteredData(sortedCalls);
       } catch (error) {
@@ -73,19 +60,8 @@ const ClientDetail = () => {
       }
     };
 
-    const fetchGravityFormsData = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/api/v1/gravity_forms/entries');
-        const entries = response.data;
-        setGravityFormsData(entries);
-      } catch (error) {
-        console.error('Error fetching Gravity Forms data:', error);
-      }
-    };
-
     fetchClientData();
-    fetchGravityFormsData();
-  }, [companyId, totalCalls, callsLast24Hours]);
+  }, [companyId]);
 
   const handleFilterChange = (selectedFilter) => {
     try {
@@ -134,8 +110,8 @@ const ClientDetail = () => {
       <h1>{COMPANY_MAPPING[companyId]} Interaction Hub</h1>
       <div className="stats">
         <p className='call-label'>New Chats: <span className={`number ${entriesLast24Hours?.[companyId] > 0 ? 'trend-up' : ''}`}>{entriesLast24Hours?.[companyId] || 0}</span></p>
-        <p className='call-label'>Total Calls: <span className={`number ${trend30Days}`}>{totalCalls || 0}</span></p>
-        <p className='call-label' >Calls Today: <span className={`number ${trend24Hours}`}>{callsLast24Hours || 0}</span></p>
+        <p className='call-label'>Total Calls: <span className={`number ${trend30Days[companyId]}`}>{totalCalls[companyId] || 0}</span></p>
+        <p className='call-label' >Calls Today: <span className={`number ${trend24Hours[companyId]}`}>{callsLast24Hours[companyId] || 0}</span></p>
       </div>
       <div className="filter-buttons">
         <button onClick={() => handleFilterChange('all')}>All Calls</button>
@@ -196,7 +172,7 @@ const ClientDetail = () => {
       )}
       <h2>Gravity Forms Entries</h2>
       <div className="gravity-forms-data">
-        {gravityFormsData.length > 0 ? (
+        {gravityFormEntries.length > 0 ? (
           <table className="gravity-forms-table">
             <thead>
               <tr>
@@ -208,43 +184,46 @@ const ClientDetail = () => {
               </tr>
             </thead>
             <tbody>
-              {gravityFormsData.slice(0, showMoreEntries ? gravityFormsData.length : 5).map((entry) => (
-                <tr key={entry.id}>
-                  <td>{entry['2']} {entry['21']}</td>
-                  <td>
-                    {entry['16'] ? (
-                      <a className='phone' href={`tel:${entry['16']}`}>
-                        {`(${entry['16'].slice(1, 4)}) ${entry['16'].slice(4, 7)}-${entry['16'].slice(7)}`}
-                      </a>
-                    ) : (
-                      'N/A'
-                    )}
-                  </td>
-                  <td>{entry['17']}</td>
-                  <td>
-                    {entry['20']?.length > 100 ? (
-                      <>
-                        {expandedEntries.includes(entry.id) ? (
-                          <>
-                            {entry['20']}
-                            <button className='show-button' onClick={() => handleToggleExpand(entry.id)}>Show Less</button>
-                          </>
-                        ) : (
-                          <>
-                            {entry['20'].substring(0, 100)}...
-                            <button className='show-button' onClick={() => handleToggleExpand(entry.id)}>Show More</button>
-                          </>
-                        )}
-                      </>
-                    ) : (
-                      entry['20']
-                    )}
-                  </td>
-                  <td>{new Date(entry.date_created).toLocaleString()}</td>
-                </tr>
-              ))}
+              {gravityFormEntries
+                .filter(entry => entry.company_id === companyId) // Filter entries by selected company
+                .slice(0, showMoreEntries ? gravityFormEntries.length : 5)
+                .map((entry) => (
+                  <tr key={entry.id}>
+                    <td>{entry.name}</td>
+                    <td>
+                      {entry.phone ? (
+                        <a className='phone' href={`tel:${entry.phone}`}>
+                          {`(${entry.phone.slice(1, 4)}) ${entry.phone.slice(4, 7)}-${entry.phone.slice(7)}`}
+                        </a>
+                      ) : (
+                        'N/A'
+                      )}
+                    </td>
+                    <td>{entry.email}</td>
+                    <td>
+                      {entry.message?.length > 100 ? (
+                        <>
+                          {expandedEntries.includes(entry.id) ? (
+                            <>
+                              {entry.message}
+                              <button className='show-button' onClick={() => handleToggleExpand(entry.id)}>Show Less</button>
+                            </>
+                          ) : (
+                            <>
+                              {entry.message.substring(0, 100)}...
+                              <button className='show-button' onClick={() => handleToggleExpand(entry.id)}>Show More</button>
+                            </>
+                          )}
+                        </>
+                      ) : (
+                        entry.message
+                      )}
+                    </td>
+                    <td>{new Date(entry.date_created).toLocaleString()}</td>
+                  </tr>
+                ))}
             </tbody>
-            {gravityFormsData.length > 5 && (
+            {gravityFormEntries.length > 5 && (
               <div className="show-more-container">
                 <button className="show-more-button" onClick={handleShowMoreEntries}>
                   {showMoreEntries ? 'Show Less' : 'Show More'}

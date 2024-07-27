@@ -29,6 +29,7 @@ export const CompanyProvider = ({ children }) => {
   const [trend24Hours, setTrend24Hours] = useState({});
   const [trend30Days, setTrend30Days] = useState({});
   const [entriesLast24Hours, setEntriesLast24Hours] = useState({}); // State to store entries count
+  const [gravityFormEntries, setGravityFormEntries] = useState([]); // State to store all Gravity Form entries
 
   const fetchCallData = async (companyId) => {
     try {
@@ -70,7 +71,7 @@ export const CompanyProvider = ({ children }) => {
     try {
       const response = await axios.get('http://localhost:3000/api/v1/gravity_forms/entries');
       const entries = response.data;
-      
+
       // Process entries to count the number of new chats for each company in the last 24 hours
       const twentyFourHoursAgo = new Date();
       twentyFourHoursAgo.setDate(twentyFourHoursAgo.getDate() - 7);
@@ -87,11 +88,12 @@ export const CompanyProvider = ({ children }) => {
       });
 
       setEntriesLast24Hours(newEntries);
+      setGravityFormEntries(entries); // Store all entries in state
     } catch (error) {
       console.error('Error fetching Gravity Forms data:', error);
     }
   };
-  
+
   useEffect(() => {
     fetchCallData(selectedCompany);
     fetchGravityFormsData();
@@ -108,7 +110,8 @@ export const CompanyProvider = ({ children }) => {
       trend30Days,
       setTrend24Hours, 
       setTrend30Days,
-      entriesLast24Hours 
+      entriesLast24Hours,
+      gravityFormEntries // Provide the entries to the context
     }}>
       {children}
     </CompanyContext.Provider>
