@@ -193,7 +193,7 @@ const ClientDetail = () => {
                     <td>
                       {entry.phone ? (
                         <a className='phone' href={`tel:${entry.phone}`}>
-                          {`(${entry.phone.slice(1, 4)}${entry.phone.slice(4, 7)}${entry.phone.slice(7)}`}
+                          {`(${entry.phone.slice(0, 3)}) ${entry.phone.slice(3, 6)}-${entry.phone.slice(6)}`}
                         </a>
                       ) : (
                         'N/A'
