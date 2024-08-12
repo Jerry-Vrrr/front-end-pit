@@ -191,14 +191,20 @@ const ClientDetail = () => {
                   <tr key={entry.id}>
                     <td>{entry.name}</td>
                     <td>
-                      {entry.phone ? (
-                        <a className='phone' href={`tel:${entry.phone}`}>
-                          {`(${entry.phone.slice(0, 3)}) ${entry.phone.slice(3, 6)}-${entry.phone.slice(6)}`}
-                        </a>
-                      ) : (
-                        'N/A'
-                      )}
-                    </td>
+  {entry.phone ? (
+    <a className='phone' href={`tel:${entry.phone}`}>
+      {(() => {
+        // Remove all non-numeric characters
+        const cleanedNumber = entry.phone.replace(/\D/g, '');
+        // Format the cleaned number
+        return `(${cleanedNumber.slice(0, 3)}) ${cleanedNumber.slice(3, 6)}-${cleanedNumber.slice(6)}`;
+      })()}
+    </a>
+  ) : (
+    'N/A'
+  )}
+</td>
+
                     <td>{entry.email}</td>
                     <td>
                       {entry.message?.length > 100 ? (
