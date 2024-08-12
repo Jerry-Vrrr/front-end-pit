@@ -191,14 +191,14 @@ const ClientDetail = () => {
                   <tr key={entry.id}>
                     <td>{entry.name}</td>
                     <td>
-  {entry.phone ? (
-    <a className='phone' href={`tel:${entry.phone.replace(/\D/g, '')}`}>
-      {`(${entry.phone.replace(/\D/g, '').slice(0, 3)}) ${entry.phone.replace(/\D/g, '').slice(3, 6)}-${entry.phone.replace(/\D/g, '').slice(6)}`}
-    </a>
-  ) : (
-    'N/A'
-  )}
-</td>
+                      {entry.phone ? (
+                        <a className='phone' href={`tel:${entry.phone}`}>
+                          {`(${entry.phone.slice(0, 3)}) ${entry.phone.slice(3, 6)}-${entry.phone.slice(6)}`}
+                        </a>
+                      ) : (
+                        'N/A'
+                      )}
+                    </td>
                     <td>{entry.email}</td>
                     <td>
                       {entry.message?.length > 100 ? (
