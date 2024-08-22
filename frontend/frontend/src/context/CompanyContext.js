@@ -28,42 +28,46 @@ export const CompanyProvider = ({ children }) => {
   const [callsLast24Hours, setCallsLast24Hours] = useState({});
   const [trend24Hours, setTrend24Hours] = useState({});
   const [trend30Days, setTrend30Days] = useState({});
-  const [entriesLast24Hours, setEntriesLast24Hours] = useState({}); // State to store entries count
-  const [gravityFormEntries, setGravityFormEntries] = useState([]); // State to store all Gravity Form entries
+  const [entriesLast24Hours, setEntriesLast24Hours] = useState({});
+  const [gravityFormEntries, setGravityFormEntries] = useState([]);
+
+  const fetchAllCompaniesData = async () => {
+    try {
+      // Fetch data for all companies in COMPANY_MAPPING
+      await Promise.all(Object.keys(COMPANY_MAPPING).map(async (companyId) => {
+        await fetchCallData(companyId);
+      }));
+      fetchGravityFormsData();
+    } catch (error) {
+      console.error('Error fetching data for all companies:', error);
+    }
+  };
 
   const fetchCallData = async (companyId) => {
     try {
       const response = await axios.get(`http://localhost:3000/api/v1/call_rail_data?company_id=${companyId}`);
       const calls = response.data;
 
-      // Filter calls from the last 30 days
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-      
+
       const recentCalls = calls.filter(call => new Date(call.start_time) >= thirtyDaysAgo);
       setTotalCalls(prev => ({ ...prev, [companyId]: recentCalls.length }));
 
-      // Filter calls from the last 24 hours
       const twentyFourHoursAgo = new Date();
       twentyFourHoursAgo.setDate(twentyFourHoursAgo.getDate() - 1);
-
       const recent24HourCalls = calls.filter(call => new Date(call.start_time) >= twentyFourHoursAgo);
       setCallsLast24Hours(prev => ({ ...prev, [companyId]: recent24HourCalls.length }));
 
-      // Calculate trends
-      const previousThirtyDaysAgo = new Date();
-      previousThirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-      const previous30DaysCalls = calls.filter(call => new Date(call.start_time) >= previousThirtyDaysAgo && new Date(call.start_time) < thirtyDaysAgo);
+      const previous30DaysCalls = calls.filter(call => new Date(call.start_time) < thirtyDaysAgo);
       const previous30DaysCount = previous30DaysCalls.length;
-      setTrend30Days(prev => ({ ...prev, [companyId]: recentCalls.length > previous30DaysCount ? 'up' : 'down' }));
+      setTrend30Days(prev => ({ ...prev, [companyId]: recentCalls.length > previous30DaysCount ? 'trend-up' : 'trend-down' }));
 
-      const previous24HoursAgo = new Date();
-      previous24HoursAgo.setDate(twentyFourHoursAgo.getDate() - 1);
-      const previous24HoursCalls = calls.filter(call => new Date(call.start_time) >= previous24HoursAgo && new Date(call.start_time) < twentyFourHoursAgo);
+      const previous24HoursCalls = calls.filter(call => new Date(call.start_time) < twentyFourHoursAgo);
       const previous24HoursCount = previous24HoursCalls.length;
-      setTrend24Hours(prev => ({ ...prev, [companyId]: recent24HourCalls.length > previous24HoursCount ? 'up' : 'down' }));
+      setTrend24Hours(prev => ({ ...prev, [companyId]: recent24HourCalls.length > previous24HoursCount ? 'trend-up' : 'trend-down' }));
     } catch (error) {
-      console.error('Error fetching the call data', error);
+      console.error('Error fetching the call data for company:', error);
     }
   };
 
@@ -72,13 +76,12 @@ export const CompanyProvider = ({ children }) => {
       const response = await axios.get('http://localhost:3000/api/v1/gravity_forms/entries');
       const entries = response.data;
 
-      // Process entries to count the number of new chats for each company in the last 24 hours
       const twentyFourHoursAgo = new Date();
-      twentyFourHoursAgo.setDate(twentyFourHoursAgo.getDate() - 7);
+      twentyFourHoursAgo.setDate(twentyFourHoursAgo.getDate() - 1);
 
       const newEntries = {};
       entries.forEach(entry => {
-        const companyId = entry.company_id; // Ensure this matches the attribute name in your entries
+        const companyId = entry.company_id;
         if (new Date(entry.date_created) >= twentyFourHoursAgo) {
           if (!newEntries[companyId]) {
             newEntries[companyId] = 0;
@@ -88,30 +91,27 @@ export const CompanyProvider = ({ children }) => {
       });
 
       setEntriesLast24Hours(newEntries);
-      setGravityFormEntries(entries); // Store all entries in state
+      setGravityFormEntries(entries);
     } catch (error) {
       console.error('Error fetching Gravity Forms data:', error);
     }
   };
 
   useEffect(() => {
-    fetchCallData(selectedCompany);
-    fetchGravityFormsData();
-  }, [selectedCompany]);
+    fetchAllCompaniesData(); // Fetch data for all companies on mount
+  }, []);
 
   return (
-    <CompanyContext.Provider value={{ 
-      selectedCompany, 
-      setSelectedCompany, 
-      COMPANY_MAPPING, 
-      totalCalls, 
+    <CompanyContext.Provider value={{
+      COMPANY_MAPPING,
+      totalCalls,
       callsLast24Hours,
       trend24Hours,
       trend30Days,
-      setTrend24Hours, 
-      setTrend30Days,
       entriesLast24Hours,
-      gravityFormEntries // Provide the entries to the context
+      gravityFormEntries,
+      selectedCompany, 
+      setSelectedCompany // Ensure this is provided in the context
     }}>
       {children}
     </CompanyContext.Provider>
