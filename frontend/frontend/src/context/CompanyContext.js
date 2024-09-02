@@ -30,14 +30,21 @@ export const CompanyProvider = ({ children }) => {
   const [trend30Days, setTrend30Days] = useState({});
   const [entriesLast24Hours, setEntriesLast24Hours] = useState({});
   const [gravityFormEntries, setGravityFormEntries] = useState([]);
+  const [allCalls, setAllCalls] = useState({}); // New state to store all calls data
+
 
   const fetchAllCompaniesData = async () => {
     try {
-      // Fetch data for all companies in COMPANY_MAPPING
-      await Promise.all(Object.keys(COMPANY_MAPPING).map(async (companyId) => {
-        await fetchCallData(companyId);
-      }));
-      fetchGravityFormsData();
+      await Promise.all([
+        Promise.all(Object.keys(COMPANY_MAPPING).map(async (companyId) => {
+          try {
+            await fetchCallData(companyId);
+          } catch (error) {
+            console.error(`Error fetching data for company ID ${companyId}:`, error);
+          }
+        })),
+        fetchGravityFormsData()
+      ]);
     } catch (error) {
       console.error('Error fetching data for all companies:', error);
     }
@@ -47,29 +54,35 @@ export const CompanyProvider = ({ children }) => {
     try {
       const response = await axios.get(`http://localhost:3000/api/v1/call_rail_data?company_id=${companyId}`);
       const calls = response.data;
-
+  
+  
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-
+  
       const recentCalls = calls.filter(call => new Date(call.start_time) >= thirtyDaysAgo);
       setTotalCalls(prev => ({ ...prev, [companyId]: recentCalls.length }));
-
+  
       const twentyFourHoursAgo = new Date();
       twentyFourHoursAgo.setDate(twentyFourHoursAgo.getDate() - 1);
       const recent24HourCalls = calls.filter(call => new Date(call.start_time) >= twentyFourHoursAgo);
       setCallsLast24Hours(prev => ({ ...prev, [companyId]: recent24HourCalls.length }));
-
+  
       const previous30DaysCalls = calls.filter(call => new Date(call.start_time) < thirtyDaysAgo);
       const previous30DaysCount = previous30DaysCalls.length;
       setTrend30Days(prev => ({ ...prev, [companyId]: recentCalls.length > previous30DaysCount ? 'trend-up' : 'trend-down' }));
-
+  
       const previous24HoursCalls = calls.filter(call => new Date(call.start_time) < twentyFourHoursAgo);
       const previous24HoursCount = previous24HoursCalls.length;
       setTrend24Hours(prev => ({ ...prev, [companyId]: recent24HourCalls.length > previous24HoursCount ? 'trend-up' : 'trend-down' }));
+
+      // Store all calls data for this company in the allCalls state
+      setAllCalls(prev => ({ ...prev, [companyId]: calls }));
+
     } catch (error) {
       console.error('Error fetching the call data for company:', error);
     }
   };
+  
 
   const fetchGravityFormsData = async () => {
     try {
@@ -105,6 +118,7 @@ export const CompanyProvider = ({ children }) => {
     <CompanyContext.Provider value={{
       COMPANY_MAPPING,
       totalCalls,
+      allCalls,
       callsLast24Hours,
       trend24Hours,
       trend30Days,

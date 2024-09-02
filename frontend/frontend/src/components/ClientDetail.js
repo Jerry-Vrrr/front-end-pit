@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { CompanyContext } from '../context/CompanyContext'; 
 import './ClientDetail.css'; 
 import play from '../assets/play.png';
@@ -8,72 +7,24 @@ import nope from '../assets/nope.png';
 
 const ClientDetail = () => {
   const { companyId } = useParams();
-  const { COMPANY_MAPPING, entriesLast24Hours, gravityFormEntries, totalCalls, callsLast24Hours, trend30Days, trend24Hours } = useContext(CompanyContext);
-  const [filteredData, setFilteredData] = useState([]);
+  const { COMPANY_MAPPING, entriesLast24Hours, gravityFormEntries, allCalls, totalCalls, callsLast24Hours, trend30Days, trend24Hours } = useContext(CompanyContext);
   const [filter, setFilter] = useState('all');
-  const [error, setError] = useState(null);
   const [expandedEntries, setExpandedEntries] = useState([]);
   const [showMoreCalls, setShowMoreCalls] = useState(false);
   const [showMoreEntries, setShowMoreEntries] = useState(false);
-  
+
   const navigate = useNavigate();
-  
-  const handleShowMoreCalls = () => {
-    setShowMoreCalls(!showMoreCalls);
-  };
-  
-  const handleShowMoreEntries = () => {
-    setShowMoreEntries(!showMoreEntries);
-  };
-  
-  const handleToggleExpand = (id) => {
-    setExpandedEntries((prevExpandedEntries) =>
-      prevExpandedEntries.includes(id)
-        ? prevExpandedEntries.filter((entryId) => entryId !== id)
-        : [...prevExpandedEntries, id]
-    );
-  };
-  
-  useEffect(() => {
-    const fetchClientData = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3000/api/v1/call_rail_data?company_id=${companyId}`);
-        const calls = response.data;
 
-        // Sort calls by start time in descending order
-        const sortedCalls = calls.sort((a, b) => new Date(b.start_time) - new Date(a.start_time));
-        
-        // Filter calls from the last 30 days
-        const thirtyDaysAgo = new Date();
-        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-        const recentCalls = calls.filter(call => new Date(call.start_time) >= thirtyDaysAgo);
+  // Handle filtering of calls based on the selected filter
+  const getFilteredCalls = () => {
+    let clientCalls = allCalls[companyId] || [];
 
-        // Filter calls from the last 24 hours
-        const twentyFourHoursAgo = new Date();
-        twentyFourHoursAgo.setDate(twentyFourHoursAgo.getDate() - 1);
-        const recent24HourCalls = calls.filter(call => new Date(call.start_time) >= twentyFourHoursAgo);
-
-        setFilteredData(sortedCalls);
-      } catch (error) {
-        console.error('Error fetching client data:', error);
-        setError('Error fetching client data. Please try again later.');
-      }
-    };
-
-    fetchClientData();
-  }, [companyId]);
-
-  const handleFilterChange = (selectedFilter) => {
-    try {
-      setFilter(selectedFilter);
-
-      let filtered = filteredData;
-
-      if (selectedFilter === 'over2minutes') {
-        filtered = filteredData.filter(call => call.duration > 120);
-      } else if (selectedFilter === 'repeat') {
+    switch (filter) {
+      case 'over2minutes':
+        return clientCalls.filter(call => call.duration > 120);
+      case 'repeat':
         const callMap = new Map();
-        filtered = filteredData.filter(call => {
+        return clientCalls.filter(call => {
           if (callMap.has(call.customer_phone_number)) {
             return true;
           } else {
@@ -81,18 +32,33 @@ const ClientDetail = () => {
             return false;
           }
         });
-      } else if (selectedFilter === 'unanswered') {
-        filtered = filteredData.filter(call => !call.answered);
-      } else {
-        filtered = filteredData;
-      }
-
-      setFilteredData(filtered);
-    } catch (error) {
-      console.error('Error applying filter:', error);
-      setError('Error applying filter. Please try again later.');
-      navigate('/');
+      case 'unanswered':
+        return clientCalls.filter(call => !call.answered);
+      default:
+        return clientCalls;
     }
+  };
+
+  const filteredCalls = getFilteredCalls();
+
+  const handleFilterChange = (selectedFilter) => {
+    setFilter(selectedFilter);
+  };
+
+  const handleShowMoreCalls = () => {
+    setShowMoreCalls(!showMoreCalls);
+  };
+
+  const handleShowMoreEntries = () => {
+    setShowMoreEntries(!showMoreEntries);
+  };
+
+  const handleToggleExpand = (id) => {
+    setExpandedEntries((prevExpandedEntries) =>
+      prevExpandedEntries.includes(id)
+        ? prevExpandedEntries.filter((entryId) => entryId !== id)
+        : [...prevExpandedEntries, id]
+    );
   };
 
   const formatDuration = (seconds) => {
@@ -111,7 +77,7 @@ const ClientDetail = () => {
       <div className="stats">
         <p className='call-label'>New Chats: <span className={`number ${entriesLast24Hours?.[companyId] > 0 ? 'trend-up' : ''}`}>{entriesLast24Hours?.[companyId] || 0}</span></p>
         <p className='call-label'>Total Calls: <span className={`number ${trend30Days[companyId]}`}>{totalCalls[companyId] || 0}</span></p>
-        <p className='call-label' >Calls Today: <span className={`number ${trend24Hours[companyId]}`}>{callsLast24Hours[companyId] || 0}</span></p>
+        <p className='call-label'>Calls Today: <span className={`number ${trend24Hours[companyId]}`}>{callsLast24Hours[companyId] || 0}</span></p>
       </div>
       <div className="filter-buttons">
         <button onClick={() => handleFilterChange('all')}>All Calls</button>
@@ -119,9 +85,7 @@ const ClientDetail = () => {
         <button onClick={() => handleFilterChange('repeat')}>Repeat Calls</button>
         <button onClick={() => handleFilterChange('unanswered')}>Unanswered Calls</button>
       </div>
-      {error ? (
-        <p className="error-message">{error}</p>
-      ) : filteredData.length > 0 ? (
+      {filteredCalls.length > 0 ? (
         <table className="client-detail-table">
           <thead>
             <tr>
@@ -133,7 +97,7 @@ const ClientDetail = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredData.slice(0, showMoreCalls ? filteredData.length : 5).map((call) => (
+            {filteredCalls.slice(0, showMoreCalls ? filteredCalls.length : 5).map((call) => (
               <tr key={call.call_id}>
                 <td>{call.customer_name}</td>
                 <td>
@@ -159,7 +123,7 @@ const ClientDetail = () => {
               </tr>
             ))}
           </tbody>
-          {filteredData.length > 5 && (
+          {filteredCalls.length > 5 && (
             <div className="show-more-container">
               <button className="show-more-button" onClick={handleShowMoreCalls}>
                 {showMoreCalls ? 'Show Less' : 'Show More'}
@@ -185,26 +149,23 @@ const ClientDetail = () => {
             </thead>
             <tbody>
               {gravityFormEntries
-                .filter(entry => entry.company_id === companyId) // Filter entries by selected company
+                .filter(entry => entry.company_id === companyId)
                 .slice(0, showMoreEntries ? gravityFormEntries.length : 5)
                 .map((entry) => (
                   <tr key={entry.id}>
                     <td>{entry.name}</td>
                     <td>
-  {entry.phone ? (
-    <a className='phone' href={`tel:${entry.phone}`}>
-      {(() => {
-        // Remove all non-numeric characters
-        const cleanedNumber = entry.phone.replace(/\D/g, '');
-        // Format the cleaned number
-        return `(${cleanedNumber.slice(0, 3)}) ${cleanedNumber.slice(3, 6)}-${cleanedNumber.slice(6)}`;
-      })()}
-    </a>
-  ) : (
-    'N/A'
-  )}
-</td>
-
+                      {entry.phone ? (
+                        <a className='phone' href={`tel:${entry.phone}`}>
+                          {(() => {
+                            const cleanedNumber = entry.phone.replace(/\D/g, '');
+                            return `(${cleanedNumber.slice(0, 3)}) ${cleanedNumber.slice(3, 6)}-${cleanedNumber.slice(6)}`;
+                          })()}
+                        </a>
+                      ) : (
+                        'N/A'
+                      )}
+                    </td>
                     <td>{entry.email}</td>
                     <td>
                       {entry.message?.length > 100 ? (
