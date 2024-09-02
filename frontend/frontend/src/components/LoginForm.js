@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
 import axios from "axios";
 import AuthContext from "../context/AuthContext";
 import './LoginForm.css'; // Import the CSS file
@@ -12,6 +13,7 @@ const LoginForm = () => {
   const [loading, setLoading] = useState(false); // Add loading state
 
   const { login } = useContext(AuthContext); // Access the login function from the AuthContext
+  const navigate = useNavigate(); // Hook for navigation
 
   const handleSubmit = async (e) => {
     e.preventDefault(); 
@@ -32,6 +34,16 @@ const LoginForm = () => {
 
       if (sessionToken) {
         login(sessionToken, role, logged_company_id); // Pass role and company ID to login
+        
+        // Redirect based on user role
+        if (role === 'admin') {
+          navigate('/admin'); // Redirect to admin dashboard
+        } else if (role === 'client' && logged_company_id) {
+          navigate(`/client/${logged_company_id}`); // Redirect to client detail for specific company
+        } else {
+          setError("Unauthorized access");
+          console.error("Unauthorized access attempt");
+        }
       } else {
         setError("No session token returned");
         console.error("No session token in response headers");
