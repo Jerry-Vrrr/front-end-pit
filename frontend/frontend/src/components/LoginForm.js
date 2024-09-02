@@ -25,17 +25,13 @@ const LoginForm = () => {
         ? { user: { email, password, password_confirmation: passwordConfirmation } }
         : { user: { email, password } };
 
-      // Log the data before sending it to the backend
-
       const response = await axios.post(url, data);
 
-      // Log the response from the server
-
-      // Add a log to see what sessionToken is
       const sessionToken = response.headers["x-session-token"];
+      const { role, logged_company_id } = response.data.user; // Extract role and logged_company_id
 
       if (sessionToken) {
-        login(sessionToken);
+        login(sessionToken, role, logged_company_id); // Pass role and company ID to login
       } else {
         setError("No session token returned");
         console.error("No session token in response headers");
@@ -47,7 +43,6 @@ const LoginForm = () => {
       setLoading(false); 
     }
   };
-
 
   return (
     <div className="login-container">

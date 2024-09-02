@@ -14,16 +14,9 @@ const ClientBox = ({ companyId, companyName }) => {
   } = useContext(CompanyContext);
 
   useEffect(() => {
-    console.log('useEffect triggered for companyId:', companyId);
-    console.log(`Total Calls for ${companyId}:`, totalCalls[companyId]);
-    console.log(`Calls Last 24 Hours for ${companyId}:`, callsLast24Hours[companyId]);
-    console.log(`Trend 30 Days for ${companyId}:`, trend30Days[companyId]);
-    console.log(`Trend 24 Hours for ${companyId}:`, trend24Hours[companyId]);
-    console.log(`Entries Last 24 Hours for ${companyId}:`, entriesLast24Hours?.[companyId]);
   }, [companyId, totalCalls, callsLast24Hours, trend24Hours, trend30Days, entriesLast24Hours]);
 
   const handleClick = () => {
-    console.log(`Company selected: ${companyId}`);
     setSelectedCompany(companyId);
   };
 

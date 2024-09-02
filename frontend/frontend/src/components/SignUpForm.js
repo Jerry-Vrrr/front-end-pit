@@ -30,7 +30,6 @@ const SignUpForm = () => {
   
       if (sessionToken) {
         login(sessionToken); // Log in the user with the token
-        console.log("Sign-up successful!");
       } else {
         setError("No session token returned. Please contact support.");
       }

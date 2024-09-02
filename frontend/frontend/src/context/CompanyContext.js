@@ -55,7 +55,6 @@ export const CompanyProvider = ({ children }) => {
       const response = await axios.get(`http://localhost:3000/api/v1/call_rail_data?company_id=${companyId}`);
       const calls = response.data;
   
-      console.log(`Fetched call data for company ID ${companyId}:`, calls); // Log the fetched data
   
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
