@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 const COMPANY_MAPPING = {
@@ -30,10 +30,10 @@ export const CompanyProvider = ({ children }) => {
   const [trend30Days, setTrend30Days] = useState({});
   const [entriesLast24Hours, setEntriesLast24Hours] = useState({});
   const [gravityFormEntries, setGravityFormEntries] = useState([]);
-  const [allCalls, setAllCalls] = useState({}); // New state to store all calls data
+  const [allCalls, setAllCalls] = useState({});
 
-
-  const fetchAllCompaniesData = async () => {
+  // Memoized function to fetch all company data
+  const fetchAllCompaniesData = useCallback(async () => {
     try {
       await Promise.all([
         Promise.all(Object.keys(COMPANY_MAPPING).map(async (companyId) => {
@@ -48,13 +48,12 @@ export const CompanyProvider = ({ children }) => {
     } catch (error) {
       console.error('Error fetching data for all companies:', error);
     }
-  };
+  }, []); // Use useCallback to memoize
 
   const fetchCallData = async (companyId) => {
     try {
       const response = await axios.get(`http://localhost:3000/api/v1/call_rail_data?company_id=${companyId}`);
       const calls = response.data;
-  
   
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
@@ -83,7 +82,6 @@ export const CompanyProvider = ({ children }) => {
     }
   };
   
-
   const fetchGravityFormsData = async () => {
     try {
       const response = await axios.get('http://localhost:3000/api/v1/gravity_forms/entries');
@@ -112,7 +110,7 @@ export const CompanyProvider = ({ children }) => {
 
   useEffect(() => {
     fetchAllCompaniesData(); // Fetch data for all companies on mount
-  }, []);
+  }, [fetchAllCompaniesData]); // Add fetchAllCompaniesData to the dependency array
 
   return (
     <CompanyContext.Provider value={{

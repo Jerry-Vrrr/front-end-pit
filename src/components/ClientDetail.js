@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams} from 'react-router-dom';
 import { CompanyContext } from '../context/CompanyContext'; 
 import './ClientDetail.css'; 
 import play from '../assets/play.png';
@@ -13,7 +13,6 @@ const ClientDetail = () => {
   const [showMoreCalls, setShowMoreCalls] = useState(false);
   const [showMoreEntries, setShowMoreEntries] = useState(false);
 
-  const navigate = useNavigate();
 
   // Handle filtering of calls based on the selected filter
   const getFilteredCalls = () => {
