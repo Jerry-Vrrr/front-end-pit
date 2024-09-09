@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/static/css/main.eef7c5c5.css",
-    "main.js": "/static/js/main.eca3106f.js",
-    "static/js/453.8ab44547.chunk.js": "/static/js/453.8ab44547.chunk.js",
-    "static/media/pit-logo.png": "/static/media/pit-logo.4bdab9490e8f490446e1.png",
-    "static/media/profile-icon.png": "/static/media/profile-icon.724b79cd582c0a0944ee.png",
-    "static/media/nope.png": "/static/media/nope.f185411d2af05247ef47.png",
-    "static/media/play.png": "/static/media/play.145277b8e012cc810de4.png",
-    "index.html": "/index.html",
-    "main.eef7c5c5.css.map": "/static/css/main.eef7c5c5.css.map",
-    "main.eca3106f.js.map": "/static/js/main.eca3106f.js.map",
-    "453.8ab44547.chunk.js.map": "/static/js/453.8ab44547.chunk.js.map"
+    "main.css": "./static/css/main.eef7c5c5.css",
+    "main.js": "./static/js/main.b7ab9f0d.js",
+    "static/js/453.8ab44547.chunk.js": "./static/js/453.8ab44547.chunk.js",
+    "static/media/pit-logo.png": "./static/media/pit-logo.4bdab9490e8f490446e1.png",
+    "static/media/profile-icon.png": "./static/media/profile-icon.724b79cd582c0a0944ee.png",
+    "static/media/nope.png": "./static/media/nope.f185411d2af05247ef47.png",
+    "static/media/play.png": "./static/media/play.145277b8e012cc810de4.png",
+    "index.html": "./index.html",
+    "main.eef7c5c5.css.map": "./static/css/main.eef7c5c5.css.map",
+    "main.b7ab9f0d.js.map": "./static/js/main.b7ab9f0d.js.map",
+    "453.8ab44547.chunk.js.map": "./static/js/453.8ab44547.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.eef7c5c5.css",
-    "static/js/main.eca3106f.js"
+    "static/js/main.b7ab9f0d.js"
   ]
 }
