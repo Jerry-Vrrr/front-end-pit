@@ -52,7 +52,7 @@ export const CompanyProvider = ({ children }) => {
 
   const fetchCallData = async (companyId) => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/v1/call_rail_data?company_id=${companyId}`);
+      const response = await axios.get(`https://apricot-pit-api.onrender.com/api/v1/call_rail_data?company_id=${companyId}`);
       const calls = response.data;
   
       const thirtyDaysAgo = new Date();
@@ -84,7 +84,7 @@ export const CompanyProvider = ({ children }) => {
   
   const fetchGravityFormsData = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/api/v1/gravity_forms/entries');
+      const response = await axios.get('https://apricot-pit-api.onrender.com/api/v1/gravity_forms/entries');
       const entries = response.data;
 
       const twentyFourHoursAgo = new Date();
