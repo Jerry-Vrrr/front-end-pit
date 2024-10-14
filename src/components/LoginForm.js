@@ -21,7 +21,7 @@ const LoginForm = () => {
     setLoading(true); 
 
     try {
-      const url = isSignUp ? "http://localhost:3000/sign_up" : "http://localhost:3000/sign_in";
+      const url = isSignUp ? "https://apricot-pit-api.onrender.com/sign_up" : "https://apricot-pit-api.onrender.com/sign_in";
       
       const data = isSignUp
         ? { user: { email, password, password_confirmation: passwordConfirmation } }
