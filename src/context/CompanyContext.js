@@ -54,38 +54,44 @@ export const CompanyProvider = ({ children }) => {
     try {
       const response = await axios.get(`https://apricot-pit-api.onrender.com/api/v1/call_rail_data?company_id=${companyId}`);
       const calls = response.data;
-  
+
+      // Sort calls by start_time in descending order
+      calls.sort((a, b) => new Date(b.start_time) - new Date(a.start_time));
+
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-  
+
       const recentCalls = calls.filter(call => new Date(call.start_time) >= thirtyDaysAgo);
       setTotalCalls(prev => ({ ...prev, [companyId]: recentCalls.length }));
-  
+
       const twentyFourHoursAgo = new Date();
       twentyFourHoursAgo.setDate(twentyFourHoursAgo.getDate() - 1);
       const recent24HourCalls = calls.filter(call => new Date(call.start_time) >= twentyFourHoursAgo);
       setCallsLast24Hours(prev => ({ ...prev, [companyId]: recent24HourCalls.length }));
-  
+
       const previous30DaysCalls = calls.filter(call => new Date(call.start_time) < thirtyDaysAgo);
       const previous30DaysCount = previous30DaysCalls.length;
       setTrend30Days(prev => ({ ...prev, [companyId]: recentCalls.length > previous30DaysCount ? 'trend-up' : 'trend-down' }));
-  
+
       const previous24HoursCalls = calls.filter(call => new Date(call.start_time) < twentyFourHoursAgo);
       const previous24HoursCount = previous24HoursCalls.length;
       setTrend24Hours(prev => ({ ...prev, [companyId]: recent24HourCalls.length > previous24HoursCount ? 'trend-up' : 'trend-down' }));
 
-      // Store all calls data for this company in the allCalls state
+      // Store all sorted calls data for this company in the allCalls state
       setAllCalls(prev => ({ ...prev, [companyId]: calls }));
 
     } catch (error) {
       console.error('Error fetching the call data for company:', error);
     }
   };
-  
+
   const fetchGravityFormsData = async () => {
     try {
       const response = await axios.get('https://apricot-pit-api.onrender.com/api/v1/gravity_forms/entries');
       const entries = response.data;
+
+      // Sort entries by date_created in descending order
+      entries.sort((a, b) => new Date(b.date_created) - new Date(a.date_created));
 
       const twentyFourHoursAgo = new Date();
       twentyFourHoursAgo.setDate(twentyFourHoursAgo.getDate() - 1);
@@ -122,7 +128,7 @@ export const CompanyProvider = ({ children }) => {
       trend30Days,
       entriesLast24Hours,
       gravityFormEntries,
-      selectedCompany, 
+      selectedCompany,
       setSelectedCompany // Ensure this is provided in the context
     }}>
       {children}
