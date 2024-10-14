@@ -15,18 +15,18 @@ function App() {
     <div className="App">
       <Navbar />
       <Routes>
-        {/* Redirect to dashboard or login based on auth status */}
-        <Route exact path="/" element={authToken ? <Dashboard /> : <LoginForm />} />
-        
-        {/* Sign-up route */}
-        <Route path="/signup" element={<SignUpForm />} /> 
+  {/* Change this to redirect to /admin */}
+  <Route exact path="/" element={authToken ? <Navigate to="/admin" /> : <LoginForm />} />
+  
+  {/* Admin and dashboard route */}
+  <Route path="/admin" element={authToken ? <Dashboard /> : <Navigate to="/" />} />
 
-        {/* Admin and client overview */}
-        <Route path="/admin" element={authToken ? <Dashboard /> : <Navigate to="/" />} />
+  {/* Client-specific detail page */}
+  <Route path="/client/:companyId" element={authToken ? <ClientDetail /> : <Navigate to="/" />} />
 
-        {/* Client-specific detail page */}
-        <Route path="/client/:companyId" element={authToken ? <ClientDetail /> : <Navigate to="/" />} />
-      </Routes>
+  {/* Sign-up route */}
+  <Route path="/signup" element={<SignUpForm />} />
+</Routes>
     </div>
   );
 }
