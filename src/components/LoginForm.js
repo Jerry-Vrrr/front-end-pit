@@ -37,7 +37,7 @@ const LoginForm = () => {
         
         // Redirect based on user role
         if (role === 'admin') {
-          navigate('/admin'); // Redirect to admin dashboard
+          navigate('/'); // Redirect to admin dashboard
         } else if (role === 'client' && logged_company_id) {
           navigate(`/client/${logged_company_id}`); // Redirect to client detail for specific company
         } else {
