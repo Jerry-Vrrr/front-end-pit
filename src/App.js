@@ -9,7 +9,7 @@ import { Route, Routes, Navigate } from 'react-router-dom';
 import AuthContext from './context/AuthContext';
 
 function App() {
-  const { authToken, userRole } = useContext(AuthContext);
+  const { authToken } = useContext(AuthContext); // Removed userRole since it's unused
 
   return (
     <div className="App">
