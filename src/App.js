@@ -9,14 +9,22 @@ import { Route, Routes, Navigate } from 'react-router-dom';
 import AuthContext from './context/AuthContext';
 
 function App() {
-  const { authToken } = useContext(AuthContext);
+  const { authToken, userRole } = useContext(AuthContext);
 
   return (
     <div className="App">
       <Navbar />
       <Routes>
+        {/* Redirect to dashboard or login based on auth status */}
         <Route exact path="/" element={authToken ? <Dashboard /> : <LoginForm />} />
-        <Route path="/signup" element={<SignUpForm />} /> {/* Add sign-up route */}
+        
+        {/* Sign-up route */}
+        <Route path="/signup" element={<SignUpForm />} /> 
+
+        {/* Admin and client overview */}
+        <Route path="/admin" element={authToken ? <Dashboard /> : <Navigate to="/" />} />
+
+        {/* Client-specific detail page */}
         <Route path="/client/:companyId" element={authToken ? <ClientDetail /> : <Navigate to="/" />} />
       </Routes>
     </div>
