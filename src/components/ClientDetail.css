@@ -3,11 +3,13 @@
 .client-detail-container {
     padding: 20px;
     margin-top: 7em;
+    font-weight: 600;
   }
 
   .stats {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
+    align-content: flex-start;
     margin-right: 2.5em;
     margin-bottom: 20px;
   }
@@ -29,6 +31,7 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    min-width: 200px;
   }
   
   .filter-buttons button:hover {
@@ -43,11 +46,11 @@
     margin-top: 20px;
   }
   
-  .client-detail-table th,
+  /* .client-detail-table th,
   .client-detail-table td {
     border: 1px solid #ddd;
     padding: 8px;
-  }
+  } */
   
   .client-detail-table th {
     background-color: #f2f2f2;
@@ -59,7 +62,7 @@
     margin-top: 20px;
   }
 
-  .phone {
+  /* .phone {
     text-decoration: none;
     color: #ff914d;
     opacity: 0.96;
@@ -71,13 +74,20 @@
     color: #ff914d;
     opacity: 1;
     text-decoration: underline;
-  }
-  .trend-up {
-    color: green !important;
+  } */
+
+  .link, .phone {
+    text-decoration: none;
+    color: navy;
+    opacity: 0.96;
+    text-shadow: gray .2px .2px 1px;
+    font-weight: 600;
   }
   
-  .trend-down {
-    color: red !important;
+  .link:hover, .phone:hover {
+    color: navy;
+    opacity: 1;
+    text-decoration: underline;
   }
   
   .total-calls, .calls-today {
@@ -98,9 +108,12 @@
 }
 
 .gravity-forms-table th,
-.gravity-forms-table td {
+.gravity-forms-table td,
+.client-detail-table th,
+  .client-detail-table td {
     border: 1px solid #ddd;
     padding: 6px;
+    min-width: 200px;
 }
 
 .gravity-forms-table th {
@@ -131,6 +144,7 @@
   
   .show-more-button {
     padding: 5px 20px;
+    min-width: 150px;
     background: #ff914d;
     color: black;
     font-size: medium;
