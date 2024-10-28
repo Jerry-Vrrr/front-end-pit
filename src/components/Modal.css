@@ -1,0 +1,103 @@
+/* Overlay for the modal with darker background */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7); /* Darker overlay for contrast */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    overflow-y: auto; /* Enables scrolling for large modal content */
+}
+
+/* Modal content container styling */
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    height: 80%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+/* Close button styling */
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #333;
+}
+
+.close-button:hover {
+    color: #ff5c5c;
+}
+
+/* Modal table styling */
+.modal-content .client-detail-table,
+.modal-content .gravity-forms-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+/* Table header and cell styles */
+.modal-content th,
+.modal-content td {
+    border: 1px solid #ddd;
+    padding: 6px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.modal-content th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+/* Scrollable area within modal */
+.modal-table-container {
+    max-height: 99%;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+/* Text truncation styling */
+.truncate {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Styles specifically for the "Message" column in the modal */
+.truncate.message {
+    max-width: 400px; /* Wider width for messages in modal */
+    white-space: normal; /* Allows multi-line display */
+}
+
+/* Link and phone number styles */
+.link, .phone {
+    text-decoration: none;
+    color: navy;
+    opacity: 0.96;
+    text-shadow: gray 0.2px 0.2px 1px;
+    font-weight: 600;
+}
+
+.link:hover, .phone:hover {
+    text-decoration: underline;
+}
+
+/* Prevent phone numbers from wrapping */
+.phone {
+    max-width: 150px;
+    display: inline-block;
+}
