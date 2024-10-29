@@ -3,18 +3,18 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import './Navbar.css';
-import logo from '../assets/pit-logo.png'; // Adjust the path if needed
-import profile from '../assets/profile-icon.png'; // Adjust the path if needed
+import logo from '../assets/pit-logo.png';
+import profile from '../assets/profile-icon.png';
 import AuthContext from '../context/AuthContext';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const { authToken, logout } = useContext(AuthContext); // Access authToken and logout from AuthContext
-  const navigate = useNavigate(); // For redirecting after logout
-  const location = useLocation(); // Get the current route
+  const { authToken, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleScroll = () => {
-    setIsScrolled(window.scrollY > 50); // Adjust the scroll threshold as needed
+    setIsScrolled(window.scrollY > 50);
   };
 
   useEffect(() => {
@@ -22,9 +22,17 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Redirect to login if authToken is null (user is logged out)
+  useEffect(() => {
+    if (!authToken) {
+      navigate('/');
+    }
+  }, [authToken, navigate]);
+
   const handleLogout = () => {
-    logout(); // Call the logout function from AuthContext
-    navigate('/login'); // Redirect to login page after logout
+    logout();
+    // Redirect to home as soon as logout occurs
+    navigate('/');
   };
 
   return (
@@ -39,17 +47,13 @@ const Navbar = () => {
           ) : (
             <Link to="/reports" className="nav-link">Reports</Link>
           )}
-          {authToken ? (
-            <>
-              <div className="profile-icon">
-                <img src={profile} alt="Profile" />
-                <div className="profile-dropdown">
-                  <button onClick={handleLogout}>Logout</button>
-                </div>
+          {authToken && (
+            <div className="profile-icon">
+              <img src={profile} alt="Profile" />
+              <div className="profile-dropdown">
+                <button onClick={handleLogout}>Logout</button>
               </div>
-            </>
-          ) : (
-            <Link to="/login" className="nav-link">Login</Link>
+            </div>
           )}
         </div>
       </div>
