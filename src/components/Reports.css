@@ -1,0 +1,22 @@
+/* src/components/Reports.css */
+
+.reports-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    font-family: Arial, sans-serif;
+  }
+  
+  .reports-container h1 {
+    font-size: 2.5rem;
+    color: #333;
+  }
+  
+  .reports-container p {
+    font-size: 1.5rem;
+    color: #666;
+  }
+  
