@@ -127,12 +127,22 @@ const ClientDetail = () => {
           <tr key={index}>
             <td>{entry.name}</td>
             <td>
-              {entry.phone ? (
-                <a className="phone" href={`tel:${entry.phone}`}>
-                  {`(${entry.phone.slice(0, 3)}) ${entry.phone.slice(3, 6)}-${entry.phone.slice(6)}`}
-                </a>
-              ) : 'N/A'}
-            </td>
+  {entry.phone ? (
+    <a className="phone" href={`tel:${entry.phone}`}>
+      {(() => {
+        const cleanedNumber = entry.phone.replace(/\D/g, ''); // Strip non-numeric characters
+        if (cleanedNumber.length === 10) {
+          return `(${cleanedNumber.slice(0, 3)}) ${cleanedNumber.slice(3, 6)}-${cleanedNumber.slice(6)}`;
+        } else if (cleanedNumber.length === 11 && cleanedNumber.startsWith('1')) {
+          return `+1 (${cleanedNumber.slice(1, 4)}) ${cleanedNumber.slice(4, 7)}-${cleanedNumber.slice(7)}`;
+        } else {
+          return entry.phone; // Display raw format if it doesn’t fit standard formats
+        }
+      })()}
+    </a>
+  ) : 'N/A'}
+</td>
+
             <td>
               {entry.email ? (
                 <a className="link" href={`mailto:${entry.email}`}>
@@ -257,12 +267,22 @@ const ClientDetail = () => {
                 <tr key={entry.id}>
                   <td>{entry.name}</td>
                   <td>
-                    {entry.phone ? (
-                      <a className="phone" href={`tel:${entry.phone}`}>
-                        {`(${entry.phone.slice(0, 3)}) ${entry.phone.slice(3, 6)}-${entry.phone.slice(6)}`}
-                      </a>
-                    ) : 'N/A'}
-                  </td>
+  {entry.phone ? (
+    <a className="phone" href={`tel:${entry.phone}`}>
+      {(() => {
+        const cleanedNumber = entry.phone.replace(/\D/g, ''); // Strip non-numeric characters
+        if (cleanedNumber.length === 10) {
+          return `(${cleanedNumber.slice(0, 3)}) ${cleanedNumber.slice(3, 6)}-${cleanedNumber.slice(6)}`;
+        } else if (cleanedNumber.length === 11 && cleanedNumber.startsWith('1')) {
+          return `+1 (${cleanedNumber.slice(1, 4)}) ${cleanedNumber.slice(4, 7)}-${cleanedNumber.slice(7)}`;
+        } else {
+          return entry.phone; // Display raw format if it doesn’t fit standard formats
+        }
+      })()}
+    </a>
+  ) : 'N/A'}
+</td>
+
                   <td>
                     {entry.email ? (
                       <a className="link" href={`mailto:${entry.email}`}>
