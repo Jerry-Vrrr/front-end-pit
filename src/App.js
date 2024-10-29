@@ -4,10 +4,10 @@ import Navbar from './components/Navbar';
 import Dashboard from './components/Dashboard';
 import ClientDetail from './components/ClientDetail';
 import LoginForm from './components/LoginForm';
-import SignUpForm from './components/SignUpForm'; // Import SignUpForm
+import SignUpForm from './components/SignUpForm'; 
+import Reports from './components/Reports';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import AuthContext from './context/AuthContext';
-import Reports from './components/Reports';
 
 
 function App() {
