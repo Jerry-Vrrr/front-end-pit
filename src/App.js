@@ -7,6 +7,8 @@ import LoginForm from './components/LoginForm';
 import SignUpForm from './components/SignUpForm'; // Import SignUpForm
 import { Route, Routes, Navigate } from 'react-router-dom';
 import AuthContext from './context/AuthContext';
+import Reports from './components/Reports';
+
 
 function App() {
   const { authToken } = useContext(AuthContext); // Removed userRole since it's unused
@@ -23,7 +25,7 @@ function App() {
 
   {/* Client-specific detail page */}
   <Route path="/client/:companyId" element={authToken ? <ClientDetail /> : <Navigate to="/" />} />
-
+  <Route path="/reports" element={<Reports />} />
   {/* Sign-up route */}
   <Route path="/signup" element={<SignUpForm />} />
 </Routes>
