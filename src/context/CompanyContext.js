@@ -17,7 +17,7 @@ const COMPANY_MAPPING = {
   "258732157": "Money",
   "427975086": "Rozas",
   "847306783": "Trust",
-  "123456789": "GGT"
+  "176449112": "GGT"
 };
 
 export const CompanyContext = createContext();
